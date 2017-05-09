@@ -1,0 +1,152 @@
+group 'cn.gomro.mid'
+version '1.0.0'
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'idea'
+
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+
+    ext {
+        wildflyVersion = '10+'
+        springFrameworkVersion = '4+'
+        luceneVersion = '6+'
+        apachePoiVersion = '3+'
+        jerseyVersion = "1+"
+        jsonVersion = "20160212"
+        aliOssVersion = "2+"
+    }
+
+    [compileJava, compileTestJava, javadoc]*.options*.encoding = 'UTF-8'
+
+    repositories {
+        //maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
+        mavenLocal()
+        mavenCentral()
+        jcenter()
+        maven { url 'https://repository.jboss.org/nexus/content/groups/public-jboss' }
+        maven { url 'https://repository.jboss.org/nexus/content/repositories/thirdparty-releases' }
+    }
+
+    dependencies {
+        compileOnly(
+                /* wildfly support */
+                "org.wildfly:wildfly-client-all:${wildflyVersion}",
+                "org.wildfly:wildfly-spec-api:${wildflyVersion}",
+
+                /* spring framework support */
+                "org.springframework:spring-aop:${springFrameworkVersion}",
+                "org.springframework:spring-beans:${springFrameworkVersion}",
+                "org.springframework:spring-core:${springFrameworkVersion}",
+                "org.springframework:spring-expression:${springFrameworkVersion}",
+                "org.springframework:spring-web:${springFrameworkVersion}",
+                "org.springframework:spring-webmvc:${springFrameworkVersion}",
+                "org.springframework:spring-context:${springFrameworkVersion}",
+
+                /* lucene support */
+                "org.apache.lucene:lucene-core:${luceneVersion}",
+                "org.apache.lucene:lucene-analyzers-common:${luceneVersion}",
+                "org.apache.lucene:lucene-queryparser:${luceneVersion}",
+                "org.apache.lucene:lucene-codecs:${luceneVersion}",
+                "org.apache.lucene:lucene-backward-codecs:${luceneVersion}",
+                "org.lionsoul:jcseg-analyzer:1.9.9",
+
+                /* apache poi support */
+                "org.apache.poi:poi:${apachePoiVersion}",
+                "org.apache.poi:poi-ooxml:${apachePoiVersion}",
+
+
+                "com.sun.jersey:jersey-core:$jerseyVersion",
+                "com.sun.jersey:jersey-client:$jerseyVersion",
+                "com.sun.jersey:jersey-json:$jerseyVersion",
+                "org.json:json:$jsonVersion",
+
+                "com.alibaba:fastjson:1.2.14",
+                "com.belerweb:pinyin4j:2.5.1",
+                "com.aliyun.oss:aliyun-sdk-oss:$aliOssVersion",
+                "commons-fileupload:commons-fileupload:1.3.2",
+        )
+    }
+}
+
+project(':core') {
+}
+
+
+project(':service') {
+    apply plugin: 'war'
+
+    dependencies {
+        providedCompile project(':core')
+    }
+}
+
+
+
+
+project(':ear') {
+    apply plugin: 'ear'
+
+    dependencies {
+        deploy project(path: ':core', configuration: 'archives')
+        deploy project(path: ':service', configuration: 'archives')
+
+        earlib(
+                /* import spring framework */
+                "org.springframework:spring-aop:${springFrameworkVersion}",
+                "org.springframework:spring-beans:${springFrameworkVersion}",
+                "org.springframework:spring-core:${springFrameworkVersion}",
+                "org.springframework:spring-expression:${springFrameworkVersion}",
+                "org.springframework:spring-web:${springFrameworkVersion}",
+                "org.springframework:spring-webmvc:${springFrameworkVersion}",
+                "org.springframework:spring-context:${springFrameworkVersion}",
+
+                /* import lucene */
+                "org.apache.lucene:lucene-core:${luceneVersion}",
+                "org.apache.lucene:lucene-analyzers-common:${luceneVersion}",
+                "org.apache.lucene:lucene-queryparser:${luceneVersion}",
+                "org.apache.lucene:lucene-codecs:${luceneVersion}",
+                "org.apache.lucene:lucene-backward-codecs:${luceneVersion}",
+                "org.lionsoul:jcseg-analyzer:1.9.9",
+
+                /* import apache poi */
+                "org.apache.poi:poi:${apachePoiVersion}",
+                "org.apache.poi:poi-ooxml:${apachePoiVersion}",
+        )
+
+        earlib("com.sun.jersey:jersey-core:$jerseyVersion")
+        earlib("com.sun.jersey:jersey-client:$jerseyVersion")
+        earlib("com.sun.jersey:jersey-json:$jerseyVersion")
+        earlib("org.json:json:$jsonVersion")
+
+        earlib("com.alibaba:fastjson:1.2.14")
+        earlib("com.belerweb:pinyin4j:2.5.1")
+        earlib("com.aliyun.oss:aliyun-sdk-oss:$aliOssVersion")
+        earlib("commons-fileupload:commons-fileupload:1.3.2")
+    }
+
+    ear {
+        archiveName = "gomro.mid.ear"
+
+        appDirName 'src/main/app'  // use application metadata found in this folder
+        // put dependent libraries into APP-INF/lib inside the generated EAR
+        libDirName 'APP-INF/lib'
+        deploymentDescriptor {  // custom entries for application.xml:
+//      fileName = "application.xml"  // same as the default value
+//      version = "6"  // same as the default value
+//      applicationName = "gomro.core"
+            //initializeInOrder = true
+//      displayName = "GOMRO CORE"  // defaults to project.name
+            // defaults to project.description if not set
+//      description = "My customized EAR for the Gradle documentation"
+//      libraryDirectory = "APP-INF/lib"  // not needed, above libDirName setting does this
+//      module("my.jar", "java")  // won't deploy as my.jar isn't deploy dependency
+//      webModule("my.war", "/")  // won't deploy as my.war isn't deploy dependency
+//      securityRole "admin"
+//      securityRole "superadmin"
+
+            webModule("service.war", "/")
+        }
+    }
+}
