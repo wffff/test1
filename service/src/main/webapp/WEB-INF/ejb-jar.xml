@@ -6,8 +6,8 @@
          version="3.1">
     <enterprise-beans>
         <session>
-            <ejb-name>GoodsBiz</ejb-name>
-            <ejb-class>cn.gomro.mid.core.biz.goods.biz.impl.GoodsBiz</ejb-class>
+            <ejb-name>StudentBiz</ejb-name>
+            <ejb-class>cn.gomro.mid.core.biz.student.biz.impl.StudentBiz</ejb-class>
             <session-type>Stateless</session-type>
         </session>
     </enterprise-beans>
