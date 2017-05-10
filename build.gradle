@@ -83,8 +83,34 @@ project(':service') {
 }
 
 
+project(':tools') {
+    apply plugin: 'application'
 
+    dependencies {
+        compile project(':core')
+    }
 
+    jar {
+        manifest {
+            attributes 'Main-Class': 'cn.gomro.mid.tools.example.client.RemoteEJBClient'
+        }
+    }
+
+    task copyLicense {
+        outputs.file new File("$buildDir/LICENSE")
+        doLast {
+            copy {
+                from "LICENSE"
+                into "$buildDir"
+            }
+        }
+    }
+
+    applicationDistribution.from(copyLicense) {
+        into ""
+    }
+    mainClassName = 'cn.gomro.mid.tools.example.client.RemoteEJBClient'
+}
 project(':ear') {
     apply plugin: 'ear'
 
