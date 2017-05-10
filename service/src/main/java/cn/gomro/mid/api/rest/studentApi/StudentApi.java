@@ -19,7 +19,7 @@ public class StudentApi extends AbstractApi {
     private IStudentBizLocal studentBizLocal;
 
     public StudentApi() {
-        
+
     }
 
     @POST

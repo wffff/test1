@@ -6,6 +6,6 @@ import javax.ws.rs.core.Application;
 /**
  * Created by momo on 16/4/22.
  */
-@ApplicationPath("")
+@ApplicationPath("rest")
 public class ApiApplication extends Application {
 }
