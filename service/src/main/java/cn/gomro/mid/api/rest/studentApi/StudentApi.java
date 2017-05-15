@@ -3,11 +3,15 @@ package cn.gomro.mid.api.rest.studentApi;
 import cn.gomro.mid.api.rest.AbstractApi;
 import cn.gomro.mid.api.rest.RestMediaType;
 import cn.gomro.mid.core.biz.student.biz.IStudentBizLocal;
+import cn.gomro.mid.core.biz.student.entity.StudentEntity;
 import cn.gomro.mid.core.biz.student.entity.StudentForm;
 import cn.gomro.mid.core.common.message.ReturnMessage;
+import com.alibaba.fastjson.JSON;
 
 import javax.ejb.EJB;
 import javax.ws.rs.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Administrator on 2017/5/9.
@@ -27,5 +31,25 @@ public class StudentApi extends AbstractApi {
     @Consumes(RestMediaType.FORM_HEADER)
     public ReturnMessage addStudent(@BeanParam StudentForm sf) {
         return studentBizLocal.saveOrder(sf);
+    }
+
+    @GET
+    @Path("/form")
+    @Consumes(RestMediaType.FORM_HEADER)
+    public String getStudentForm() {
+
+        List<StudentEntity> list=studentBizLocal.getStudent().getData();
+        String h="{\"total\":"+list.size()+",\"rows\":[\n";
+        String f=   "]}";
+        String b="";
+        for(int i=0;i<list.size();i++){
+            if(i==list.size()-1){
+                b+=list.get(i).toString();
+            }else{
+                b+=list.get(i).toString()+",";
+            }
+
+        }
+        return h+b+f;
     }
 }

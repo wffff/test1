@@ -1,6 +1,7 @@
 package cn.gomro.mid.core.biz.student.entity;
 
 import cn.gomro.mid.core.biz.base.AbstractEntity;
+import com.alibaba.fastjson.JSON;
 
 import javax.persistence.*;
 
@@ -40,9 +41,6 @@ public class StudentEntity extends AbstractEntity {
 
     @Override
     public String toString() {
-        return "StudentEntity{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                '}';
+        return JSON.toJSONString(this);
     }
 }

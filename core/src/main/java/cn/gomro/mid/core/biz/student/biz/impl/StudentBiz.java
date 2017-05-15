@@ -11,6 +11,7 @@ import cn.gomro.mid.core.common.message.ReturnMessage;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import java.util.List;
 
 /**
  * Created by Administrator on 2017/5/9.
@@ -23,5 +24,10 @@ public class StudentBiz extends AbstractSessionBiz implements IStudentBizLocal,I
     public ReturnMessage saveOrder(StudentForm sf) {
         StudentEntity se=new StudentEntity(sf.getName());
         return studentSerivce.addItem(se);
+    }
+
+    @Override
+    public ReturnMessage<List<StudentEntity>> getStudent() {
+        return studentSerivce.getStudent();
     }
 }

@@ -1,5 +1,6 @@
 package cn.gomro.mid.core.biz.base;
 
+import cn.gomro.mid.core.biz.student.entity.StudentEntity;
 import cn.gomro.mid.core.common.message.ReturnMessage;
 
 import java.io.Serializable;
@@ -21,4 +22,6 @@ public interface IService<T> extends Serializable {
     ReturnMessage editItem(T entity);
 
     ReturnMessage delItem(T entity);
+
+    ReturnMessage<List<StudentEntity>> getStudent();
 }
