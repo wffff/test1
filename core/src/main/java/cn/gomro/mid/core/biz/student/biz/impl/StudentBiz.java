@@ -30,4 +30,14 @@ public class StudentBiz extends AbstractSessionBiz implements IStudentBizLocal,I
     public ReturnMessage<List<StudentEntity>> getStudent() {
         return studentSerivce.getStudent();
     }
+
+    @Override
+    public ReturnMessage<List<StudentEntity>> getStudentByPage(int page, int rows) {
+        return studentSerivce.getStudentByPage(page,rows);
+    }
+
+    @Override
+    public int getStudentTotal() {
+        return studentSerivce.getStudentTotal();
+    }
 }

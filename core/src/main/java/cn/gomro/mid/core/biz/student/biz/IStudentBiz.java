@@ -13,4 +13,7 @@ public interface IStudentBiz {
     ReturnMessage saveOrder(StudentForm sf);
 
     ReturnMessage<List<StudentEntity>> getStudent();
+    ReturnMessage<List<StudentEntity>> getStudentByPage(int page,int rows);
+
+    int getStudentTotal();
 }

@@ -36,20 +36,23 @@ public class StudentApi extends AbstractApi {
     @GET
     @Path("/form")
     @Consumes(RestMediaType.FORM_HEADER)
-    public String getStudentForm() {
+    public String getStudentForm( @DefaultValue("1")  @QueryParam("page") Integer page,@DefaultValue("5") @QueryParam("rows") Integer rows) {
 
-        List<StudentEntity> list=studentBizLocal.getStudent().getData();
-        String h="{\"total\":"+list.size()+",\"rows\":[\n";
-        String f=   "]}";
-        String b="";
-        for(int i=0;i<list.size();i++){
-            if(i==list.size()-1){
-                b+=list.get(i).toString();
-            }else{
-                b+=list.get(i).toString()+",";
+        System.out.println(page+":"+rows);
+        int total = studentBizLocal.getStudentTotal();
+        List<StudentEntity> list = studentBizLocal.getStudentByPage(page,rows).getData();
+//        List<StudentEntity> list = studentBizLocal.getStudent().getData();
+        String h = "{\"total\":" + total + ",\"rows\":[\n";
+        String f = "]}";
+        String b = "";
+        for (int i = 0; i < list.size(); i++) {
+            if (i == list.size() - 1) {
+                b += list.get(i).toString();
+            } else {
+                b += list.get(i).toString() + ",";
             }
 
         }
-        return h+b+f;
+        return h + b + f;
     }
 }

@@ -34,4 +34,33 @@ public class StudentService extends AbstractSessionService<StudentEntity> implem
         List<StudentEntity> resultList=query.getResultList();
         return ReturnMessage.success(resultList);
     }
+
+    @Override
+    public ReturnMessage<List<StudentEntity>> getStudentByPage(int page, int rows) {
+        String jpql = "select i from StudentEntity i";
+        String jpqlCount = "select count(i) from StudentEntity i";
+        Query query = em.createQuery(jpql);
+        Query countQuery = em.createQuery(jpqlCount);
+        int count = new Long((long) countQuery.getSingleResult()).intValue();
+        int pages = rows == 0 ? 0 : (count / rows);
+        if (count % rows != 0) pages++;
+        if (page < 1) page = 1;
+        if (page > pages) page = pages;
+
+        int start = (page - 1) * rows;
+        if (count > 0 && start < count) {
+            query.setFirstResult(start);
+            query.setMaxResults(rows);
+        }
+        List<StudentEntity> resultList=query.getResultList();
+        return ReturnMessage.success(resultList);
+    }
+
+    @Override
+    public int getStudentTotal() {
+        String jpqlCount = "select count(i) from StudentEntity i";
+        Query countQuery = em.createQuery(jpqlCount);
+        int count = new Long((long) countQuery.getSingleResult()).intValue();
+        return count;
+    }
 }
